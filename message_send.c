@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #define MSGSZ 128
-
 typedef struct msgbuf{
     long mtype;
     char mtext[MSGSZ];
@@ -35,5 +34,19 @@ int main()
         perror("msgsnd");
         exit(1);
     }
+
+    printf("Proceso 1 envia: %s\n", sbuf.mtext);
+
+    // Esperar la respuesta del proceso 2
+    if (msgrcv(msqid, &rbuf, MSGSZ, 2, 0) < 0) {
+        perror("msgrcv");
+        exit(1);
+    }
+
+    printf("Proceso 1 recibe: %s\n", rbuf.mtext);
+
+    // Mostrar la respuesta final solicitada
+    printf("Proceso 1 responde: I can hear you too\n");
+    
     exit(0);
 }
